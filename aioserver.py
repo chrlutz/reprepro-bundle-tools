@@ -28,7 +28,7 @@ async def handle(request):
 async def websocket_handler(request):
     global events
     ws = web.WebSocketResponse()
-    print(f"request {request}")
+    print(f"request {request}: {request.method}")
     await ws.prepare(request)
     async for msg in ws:
         if msg.type == aiohttp.WSMsgType.TEXT:
@@ -57,8 +57,8 @@ def run_webserver():
     app = web.Application()
     app.add_routes([web.get('/', handle),
                 web.get('/log', websocket_handler),
-                web.get('/doit', handle_doit),
-                web.get('/{name}', handle)])
+                web.get('/doit', handle_doit)])
+    app.router.add_static('/app/', path=str('./app/'))
     web.run_app(app)
 
 run_webserver()
