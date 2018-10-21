@@ -1,7 +1,7 @@
 import { BundleListService } from "./bundle-list.service";
 import { ServerLogComponent } from "./../server-log/server-log.component";
 import { Component, OnInit, SystemJsNgModuleLoader } from "@angular/core";
-import { Bundle } from "../shared/bundle";
+import { IBundleListItem } from "../shared/bundle-list-item.interface";
 
 @Component({
   selector: "bundle-list",
@@ -13,7 +13,7 @@ export class BundleListComponent implements OnInit {
   selectedState = new Set<string>();
   selectedTarget = new Set<string>();
   selectedCreator = new Set<string>();
-  bundles: Bundle[] = [];
+  bundles: IBundleListItem[] = [];
 
   constructor(private bundleListService: BundleListService) {}
 
@@ -23,7 +23,7 @@ export class BundleListComponent implements OnInit {
 
   update() {
     this.bundleListService.getBundleList().subscribe(
-      (bundles: Bundle[]) => {
+      (bundles: IBundleListItem[]) => {
         this.bundles = bundles;
       },
       errResp => {
@@ -32,7 +32,7 @@ export class BundleListComponent implements OnInit {
     );
   }
 
-  getBundles(): Bundle[] {
+  getBundles(): IBundleListItem[] {
     return this.bundles.filter(
       (b) => this.selectedDistribution.has(b.distribution)
     ).filter(

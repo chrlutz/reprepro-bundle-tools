@@ -1,4 +1,4 @@
-export interface Bundle {
+export interface IBundleListItem {
   name: string;
   distribution: string;
   target: string;
