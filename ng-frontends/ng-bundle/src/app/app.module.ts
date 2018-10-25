@@ -2,6 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
 import { AppComponent } from "./app.component";
 import { APP_ROUTES } from "./app.routes";
@@ -20,7 +21,12 @@ import { BundleListService } from "./bundle-list/bundle-list.service";
     SelectFilterComponent,
     BundleEditComponent
   ],
-  imports: [BrowserModule, HttpClientModule, RouterModule.forRoot(APP_ROUTES)],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    NgbModule,
+    RouterModule.forRoot(APP_ROUTES)
+  ],
   //providers: [{ provide: BundleListService, useClass: MockBundleListService }],
   bootstrap: [AppComponent]
 })
