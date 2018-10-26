@@ -2,14 +2,32 @@
 const {app, BrowserWindow} = require('electron')
 const path = require("path");
 const url = require("url");
+const { spawn } = require('child_process');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let backend
+
+function startLocalBackend() {
+    backend = spawn('../../bin/bundle-app', ['--port=4254', '--no-static-files', '--no-open-url']);
+
+    backend.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+    });
+
+    backend.stderr.on('data', (data) => {
+      console.log(`stderr: ${data}`);
+    });
+
+    backend.on('close', (code) => {
+      console.log(`child process exited with code ${code}`);
+    });
+}
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 1124, height: 600})
 
   // and load the index.html of the app
   mainWindow.loadURL(
@@ -44,6 +62,9 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit()
   }
+  if (backend) {
+    backend.kill()
+  }
 })
 
 app.on('activate', function () {
@@ -56,3 +77,4 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+startLocalBackend()

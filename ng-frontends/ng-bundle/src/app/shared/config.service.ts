@@ -7,8 +7,8 @@ export class ConfigService {
 
   constructor() {}
 
-  private apiBase = "/api";
-  //private apiBase = "//0.0.0.0:8081/api";
+  //private apiBase = "/api";
+  private apiBase = "//0.0.0.0:4254/api";
 
   getApiUrl(functionName): string {
     return "http:" + this.apiBase + "/" + functionName;
@@ -19,6 +19,6 @@ export class ConfigService {
   }
 
   isElectronApp(): boolean {
-    return false;
+    return true;
   }
 }
