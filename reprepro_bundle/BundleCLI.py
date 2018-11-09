@@ -346,8 +346,9 @@ def cmd_bundles(args):
             if args.editable and not bundle.isEditable():
                 continue
             editable = "EDITABLE" if bundle.isEditable() else "READONLY"
-            target = "[{}]".format(bundle.getInfoTag("Target", "no-target"))
-            subject = bundle.getInfoTag("Releasenotes", "--no-subject--").split("\n")[0]
+            info = bundle.getInfo()
+            target = "[{}]".format(info.get("Target", "no-target"))
+            subject = info.get("Releasenotes", "--no-subject--").split("\n")[0]
             print(" ".join((bundle.bundleName, editable, target, subject)))
 
 
@@ -508,19 +509,10 @@ def infofileToEditformat(infile, out_fh, cancel_remark=None):
                 print("{}: {}".format(key, section[key]), file=out_fh)
             if "Releasenotes" in section:
                 print("\n= Releasenotes =".upper(), file=out_fh)
-                lines = multilineToString(section["Releasenotes"])
+                lines = Bundle.unescapeMultiline(section["Releasenotes"])
                 for line in lines.split("\n"):
                     print(line, file=out_fh)
     out_fh.flush()
-
-
-def multilineToString(multiline):
-    res = list()
-    for line in multiline.split("\n"):
-        line = re.sub(r"^ ", "", line)
-        line = re.sub(r"^\.$", "", line)
-        res.append(line)
-    return "\n".join(res)
 
 
 def editformatToInfofile(infile, outfile):
